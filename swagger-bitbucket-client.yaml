@@ -1,0 +1,71 @@
+swagger: "2.0"
+info:
+  description: "This is the bitbucket rest resources endpoint documentation"
+  version: "0.1.0"
+  title: "bitbucket Rest Resources"
+basePath: "/rest/api/1"
+tags:
+  - name: bitbucket
+
+schemes:
+  - "https"
+paths:
+  /projects//{projectKey}:
+    get:
+      summary: "Returns information about a project."
+      operationId: "getProject"
+      tags:
+        - bitbucket
+      security:
+        - crowdAuth: []
+      parameters:
+        - name: "projectKey"
+          type: "string"
+          in: "path"
+          description: "The project key to return information about"
+          required: true
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      responses:
+        200:
+          description: "Returns metadata of the project"
+          schema:
+            $ref: '#/definitions/projectMeta'
+        404:
+          description: "Returned if there is no space with the given key, or if the calling user does not have permission to view the space."
+          schema:
+            $ref: '#/definitions/projectMetaError'
+securityDefinitions:
+  crowdAuth:
+    type: basic
+definitions:
+  projectMeta:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+      key:
+        type: "string"
+      name:
+        type: "string"
+      public:
+        type: "boolean"
+      type:
+        type: "string"
+
+  projectMetaError:
+    type: "object"
+    properties:
+      errors:
+        type: "array"
+        items:
+          type: "object"
+          properties:
+            context:
+              type: "string"
+            exceptionName:
+              type: "string"
+
+
